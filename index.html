@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Myntra - Online Shopping for Women, Men, Kids Fashion & Lifestyle</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Assistant', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            myntra: {
+              pink: '#FF3F6C',
+              dark: '#282C3F',
+              gray: '#535766',
+              light: '#F5F5F6',
+              peach: '#FFF0F3',
+              green: '#03A685',
+              gold: '#D4AF37',
+              maroon: '#6E1324'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Assistant', sans-serif; background-color: #FAFAFB; color: #282C3F; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Custom Folder Tab Curve */
+    .folder-tab-active {
+      position: relative;
+      background: #FFFFFF;
+      border-top: 1.5px solid #FF3F6C;
+      border-left: 1.5px solid #FF3F6C;
+      border-right: 1.5px solid #FF3F6C;
+      border-bottom: 2px solid #FFFFFF;
+      border-radius: 14px 14px 0 0;
+      margin-bottom: -1px;
+      z-index: 10;
+    }
+
+    /* Decorative Scalloped Badge */
+    .wedding-badge {
+      background: radial-gradient(circle at center, #1E5641 0%, #103829 100%);
+      border: 1.5px solid #E5C158;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Arch Header */
+    .arch-banner {
+      background: linear-gradient(90deg, #590D1C 0%, #8A172D 50%, #590D1C 100%);
+      border: 1.5px solid #E5C158;
+      border-radius: 24px 24px 8px 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-view { animation: fadeIn 0.2s ease-out forwards; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Reusable SVG Definitions -->
+  <svg width="0" height="0" class="hidden">
+    <defs>
+      <linearGradient id="myntraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FF3F6C" />
+        <stop offset="50%" stop-color="#FF5E3A" />
+        <stop offset="100%" stop-color="#F7941D" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- APP SHELL -->
+  <div id="app" class="w-full max-w-7xl mx-auto bg-white min-h-screen shadow-sm flex flex-col relative pb-20 md:pb-8">
+    
+    <!-- ==================== HOME VIEW ==================== -->
+    <div id="view-home" class="animate-view">
+      
+      <!-- 1. TOP APP BAR & SEARCH HEADER (Mobile & Desktop Responsive) -->
+      <header class="bg-gradient-to-b from-[#FFF0F3] via-[#FFF6F8] to-white sticky top-0 z-40 border-b border-pink-100/60">
+        <div class="max-w-7xl mx-auto px-3.5 md:px-6 pt-2.5 pb-2">
+          
+          <!-- Location & Wallet Row (Mobile) / Top Utility Bar (Desktop) -->
+          <div class="flex items-center justify-between mb-2.5">
+            <button onclick="openPage('address')" class="flex items-center gap-1.5 text-left group">
+              <i data-lucide="map-pin" class="w-4 h-4 text-[#282C3F] fill-[#282C3F] shrink-0"></i>
+              <span class="text-xs md:text-sm text-[#282C3F] truncate max-w-[230px] sm:max-w-md">
+                Deliver to <strong id="current-address-label" class="font-bold">Ayushi Sharma - 541R/...</strong>
+              </span>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#535766] group-hover:translate-y-0.5 transition-transform"></i>
+            </button>
+
+            <div class="flex items-center gap-3">
+              <!-- Desktop Quick Links -->
+              <div class="hidden md:flex items-center gap-5 text-xs font-bold tracking-wider text-[#282C3F] mr-2">
+                <button onclick="selectGender('MEN')" class="hover:text-[#FF3F6C] uppercase">Men</button>
+                <button onclick="selectGender('WOMEN')" class="hover:text-[#FF3F6C] uppercase">Women</button>
+                <button onclick="selectGender('KIDS')" class="hover:text-[#FF3F6C] uppercase">Kids</button>
+                <button onclick="openCategoryPage('Homeliving')" class="hover:text-[#FF3F6C] uppercase">Home & Living</button>
+                <button onclick="openCategoryPage('Beauty')" class="hover:text-[#FF3F6C] uppercase">Beauty</button>
+                <button onclick="openPage('fwd')" class="hover:text-[#FF3F6C] uppercase flex items-center gap-1">Studio <span class="text-[9px] text-[#FF3F6C] font-extrabold">NEW</span></button>
+              </div>
+
+              <!-- Wallet Pill Badge -->
+              <button onclick="openPage('wallet')" class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-full shadow-sm border border-gray-100 hover:border-emerald-300 transition">
+                <span id="wallet-balance-pill" class="text-xs font-extrabold text-[#282C3F]">₹0</span>
+                <span class="w-4 h-4 rounded bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold">₹</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search & Action Icons Row -->
+          <div class="flex items-center gap-2.5 md:gap-4">
+            <!-- Search Bar -->
+            <div class="flex-1 flex items-center bg-white border border-gray-200/90 rounded-full px-3 py-2 shadow-xs focus-within:border-[#FF3F6C] transition">
+              <!-- Myntra Logo SVG -->
+              <button onclick="goHome()" class="shrink-0 mr-2.5 flex items-center" title="Myntra Home">
+                <svg class="w-6 h-5" viewBox="0 0 48 36" fill="none">
+                  <path d="M4 32V6L16 20L24 10L32 20L44 6V32H37V17L24 31L11 17V32H4Z" fill="url(#myntraGrad)"/>
+                </svg>
+              </button>
+              <button onclick="openPage('search')" class="flex-1 text-left text-xs md:text-sm text-gray-400 truncate">
+                Search for <span class="text-gray-500 font-medium">"Dresses"</span>
+              </button>
+              <div class="flex items-center gap-2.5 text-[#535766] pl-2">
+                <button onclick="openPage('voice-search')" title="Voice Search" class="hover:text-[#FF3F6C]">
+                  <i data-lucide="mic" class="w-4 h-4"></i>
+                </button>
+                <button onclick="openPage('visual-search')" title="Visual Search" class="hover:text-[#FF3F6C]">
+                  <i data-lucide="camera" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Action Icons -->
+            <div class="flex items-center gap-3 md:gap-5 text-[#282C3F]">
+              <button onclick="openPage('notifications')" class="relative hover:text-[#FF3F6C]" title="Notifications">
+                <i data-lucide="bell" class="w-5 h-5 stroke-[1.8]"></i>
+                <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#FF3F6C] rounded-full"></span>
+              </button>
+              <button onclick="openPage('wishlist')" class="relative hover:text-[#FF3F6C]" title="Wishlist">
+                <i data-lucide="heart" class="w-5 h-5 stroke-[1.8]"></i>
+                <span id="wishlist-badge" class="hidden absolute -top-1.5 -right-1.5 bg-[#FF3F6C] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+              </button>
+              <button onclick="openPage('profile')" class="hover:text-[#FF3F6C]" title="Profile">
+                <i data-lucide="user-circle-2" class="w-5 h-5 stroke-[1.8]"></i>
+              </button>
+              <!-- Desktop Bag Icon -->
+              <button onclick="openPage('bag')" class="hidden md:flex relative items-center gap-1 hover:text-[#FF3F6C]" title="Bag">
+                <i data-lucide="shopping-bag" class="w-5 h-5 stroke-[1.8]"></i>
+                <span id="desktop-bag-badge" class="bg-[#FF3F6C] text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">2</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. CATEGORY TABS (Curved Folder-Style Navigation) -->
+        <div class="max-w-7xl mx-auto px-2.5 md:px-6 pt-1 border-b border-pink-200/70 flex items-end justify-between">
+          <div id="gender-tabs" class="flex items-end flex-1 max-w-xl">
+            <button data-tab="ALL" onclick="switchGenderTab('ALL')" class="gender-tab folder-tab-active flex-1 py-2 text-xs md:text-sm font-extrabold tracking-wider text-[#282C3F] transition">
+              ALL
+            </button>
+            <button data-tab="MEN" onclick="switchGenderTab('MEN')" class="gender-tab flex-1 py-2 text-xs md:text-sm font-bold tracking-wider text-[#535766] hover:text-[#282C3F] transition">
+              MEN
+            </button>
+            <button data-tab="WOMEN" onclick="switchGenderTab('WOMEN')" class="gender-tab flex-1 py-2 text-xs md:text-sm font-bold tracking-wider text-[#535766] hover:text-[#282C3F] transition">
+              WOMEN
+            </button>
+            <button data-tab="KIDS" onclick="switchGenderTab('KIDS')" class="gender-tab flex-1 py-2 text-xs md:text-sm font-bold tracking-wider text-[#535766] hover:text-[#282C3F] transition">
+              KIDS
+            </button>
+          </div>
+
+          <button onclick="openPage('all-categories')" class="mb-1.5 ml-2 w-7 h-7 rounded-lg bg-[#282C3F] text-white flex items-center justify-center hover:bg-[#FF3F6C] transition shrink-0" title="All Categories">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- MAIN CONTENT CONTAINER -->
+      <main class="max-w-7xl mx-auto px-3.5 md:px-6 pt-3.5 space-y-4 md:space-y-6">
+        
+        <!-- 3. VISUAL CATEGORY STRIP -->
+        <section>
+          <div id="category-strip" class="flex md:grid md:grid-cols-6 gap-3.5 md:gap-5 overflow-x-auto no-scrollbar pb-1">
+            <!-- Rendered by JS based on active tab -->
+          </div>
+        </section>
+
+        <!-- 4. MAIN HERO CAROUSEL BANNER + DESKTOP SIDE PROMO -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <div class="lg:col-span-8">
+            <div id="hero-carousel" class="relative rounded-2xl overflow-hidden shadow-md cursor-pointer group select-none" onclick="openHeroCollection()">
+              <!-- Slide Container -->
+              <div id="hero-slide-content" class="relative h-[225px] sm:h-[290px] md:h-[340px] w-full bg-[#7A1B2D] transition-all duration-300">
+                <!-- Background Image -->
+                <img id="hero-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80" alt="Grand Wedding Sale" class="w-full h-full object-cover object-left" />
+                
+                <!-- Warm Festive Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-r from-black/15 via-[#6E1324]/65 to-[#540B19]/95"></div>
+
+                <!-- Gold Floral Corner Accents -->
+                <span class="absolute top-2.5 left-2.5 text-[#E5C158] text-sm opacity-90">✿</span>
+                <span class="absolute top-2.5 right-2.5 text-[#E5C158] text-sm opacity-90">✿</span>
+                <span class="absolute bottom-2.5 left-2.5 text-[#E5C158] text-sm opacity-90">✿</span>
+                <span class="absolute bottom-2.5 right-2.5 text-[#E5C158] text-sm opacity-90">✿</span>
+
+                <!-- Right Side Overlay Content -->
+                <div class="absolute inset-y-0 right-0 w-[56%] sm:w-[50%] flex flex-col items-center justify-center text-center px-3 pr-4">
+                  <!-- Myntra M -->
+                  <svg class="w-6 h-4 mb-1 drop-shadow" viewBox="0 0 48 36" fill="none">
+                    <path d="M4 32V6L16 20L24 10L32 20L44 6V32H37V17L24 31L11 17V32H4Z" fill="url(#myntraGrad)"/>
+                  </svg>
+
+                  <!-- Ornate Green Badge -->
+                  <div class="wedding-badge px-3.5 py-1.5 rounded-xl mb-2">
+                    <p id="hero-kicker" class="text-[9px] sm:text-[11px] tracking-[0.18em] text-[#F5D97E] font-bold uppercase leading-none">GRAND</p>
+                    <p id="hero-badge-title" class="font-serif text-xs sm:text-base md:text-lg font-bold text-white tracking-wide leading-tight mt-0.5">WEDDING<br/>SALE</p>
+                  </div>
+
+                  <!-- Big Discount Text -->
+                  <h1 id="hero-discount" class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-none drop-shadow">
+                    50-80%<br/><span class="text-xl sm:text-3xl md:text-4xl">OFF</span>
+                  </h1>
+
+                  <!-- Gold Pill CTA Button -->
+                  <button class="mt-2.5 bg-gradient-to-r from-[#F9D976] to-[#F39F38] text-[#4A121B] font-extrabold text-[11px] sm:text-xs px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 group-hover:scale-105 transition">
+                    <span>Shop Now</span>
+                    <span class="w-4 h-4 rounded-full bg-[#C81E32] text-white flex items-center justify-center">
+                      <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Prev/Next Arrows on Hover (Desktop) -->
+              <button onclick="event.stopPropagation(); prevSlide()" class="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white items-center justify-center shadow text-[#282C3F]">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <button onclick="event.stopPropagation(); nextSlide()" class="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white items-center justify-center shadow text-[#282C3F]">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 10 Pagination Dots -->
+            <div id="hero-dots" class="flex items-center justify-center gap-1.5 mt-2.5">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Desktop Right-Side Featured Lookbook Panel -->
+          <div class="hidden lg:flex lg:col-span-4 flex-col justify-between bg-gradient-to-br from-[#FFF5F7] to-[#FDF2E9] rounded-2xl p-5 border border-pink-100">
+            <div>
+              <span class="inline-block bg-[#FF3F6C] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Wedding Edit '26</span>
+              <h2 class="font-serif text-2xl font-bold text-[#282C3F] mt-2">Curated Shaadi Store</h2>
+              <p class="text-xs text-[#535766] mt-1">Handpicked lehengas, sherwanis, heirloom jewellery & festive footwear with express delivery.</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 my-3">
+              <div onclick="openCategoryPage('Ethnic Wear')" class="bg-white p-2.5 rounded-xl shadow-2xs cursor-pointer hover:shadow transition">
+                <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=300&q=80" class="w-full h-24 object-cover rounded-lg mb-1.5" alt="Bridal Lehengas"/>
+                <p class="text-xs font-bold text-[#282C3F]">Bridal Lehengas</p>
+                <p class="text-[11px] font-bold text-[#FF3F6C]">Min 60% Off</p>
+              </div>
+              <div onclick="openCategoryPage('Mens Ethnic')" class="bg-white p-2.5 rounded-xl shadow-2xs cursor-pointer hover:shadow transition">
+                <img src="https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=300&q=80" class="w-full h-24 object-cover rounded-lg mb-1.5" alt="Royal Sherwanis"/>
+                <p class="text-xs font-bold text-[#282C3F]">Royal Sherwanis</p>
+                <p class="text-[11px] font-bold text-[#FF3F6C]">50-75% Off</p>
+              </div>
+            </div>
+            <button onclick="openHeroCollection()" class="w-full py-2.5 bg-[#282C3F] hover:bg-[#FF3F6C] text-white text-xs font-bold rounded-xl transition">
+              Explore Complete Wedding Store →
+            </button>
+          </div>
+        </section>
+
+        <!-- 5. SPONSOR BAR -->
+        <section class="bg-white border-y border-gray-100 py-2 px-1">
+          <div class="grid grid-cols-2 divide-x divide-gray-200 items-center">
+            <!-- Left Sponsor: MOKOSH -->
+            <button onclick="openBrandPage('MOKOSH')" class="flex items-center justify-center gap-2 pr-2 py-1 hover:opacity-80 transition">
+              <span class="text-[8px] sm:text-[10px] font-bold text-gray-400 tracking-wider uppercase leading-tight text-right">POWERED<br/>BY</span>
+              <div class="bg-[#1B8A4B] text-white px-2.5 py-1 rounded-xs font-extrabold tracking-widest text-xs sm:text-sm shadow-2xs">
+                MOKOSH
+              </div>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-400"></i>
+            </button>
+
+            <!-- Right Sponsor: HOUSE OF PATAUDI -->
+            <button onclick="openBrandPage('HOUSE OF PATAUDI')" class="flex items-center justify-center gap-2 pl-2 py-1 hover:opacity-80 transition">
+              <span class="text-[8px] sm:text-[10px] font-bold text-gray-400 tracking-wider uppercase leading-tight text-right">CO-POWERED<br/>BY</span>
+              <div class="flex flex-col items-center">
+                <span class="font-serif text-[11px] text-[#282C3F] leading-none">♛</span>
+                <span class="text-[9px] sm:text-xs font-bold tracking-wider text-[#282C3F] uppercase">HOUSE OF PATAUDI</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-400"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- 6. BANK OFFER BANNER -->
+        <section onclick="openPage('bank-offers')" class="relative rounded-xl bg-gradient-to-r from-[#FDE7DC] via-[#FCEEE8] to-[#F9DFD4] border border-orange-200/70 px-3 py-2.5 flex items-center justify-between cursor-pointer hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5 sm:gap-4">
+            <!-- Dual Credit Card Icons -->
+            <div class="flex items-center -space-x-2 shrink-0">
+              <div class="w-9 h-6 rounded bg-gradient-to-br from-[#1C2541] to-[#3A506B] text-white p-1 flex flex-col justify-between shadow-xs border border-white/40">
+                <span class="text-[6px] font-bold tracking-tighter">AXIS</span>
+                <span class="w-2 h-1.5 bg-amber-300 rounded-[1px]"></span>
+              </div>
+              <div class="w-9 h-6 rounded bg-gradient-to-br from-[#00529B] to-[#00AEEF] text-white p-1 flex flex-col justify-between shadow-xs border border-white/40">
+                <span class="text-[6px] font-extrabold text-yellow-300">f</span>
+                <span class="text-[6px] font-bold">SBI</span>
+              </div>
+            </div>
+
+            <div class="h-7 w-[1px] bg-orange-300/60"></div>
+
+            <div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-[#282C3F] leading-tight">Flat 7.5% Cashback</h3>
+              <p class="text-[10px] sm:text-xs text-[#535766] leading-tight">With Flipkart Axis Bank & SBI Credit Cards</p>
+            </div>
+          </div>
+
+          <span class="text-[7px] sm:text-[9px] text-gray-500 font-semibold uppercase tracking-tighter [writing-mode:vertical-rl] rotate-180">
+            *T&C Apply
+          </span>
+        </section>
+
+        <!-- 7. PROMOTIONAL DEAL CARDS (2-Column Grid) -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
+          <!-- Left Card: MIN 80% OFF -->
+          <div onclick="openDealPage('Min. 80% Off Ethnic Steals', 80)" class="relative rounded-xl overflow-hidden bg-gradient-to-r from-[#F9E6C8] via-[#F7DFBA] to-[#F2CE9B] border border-amber-200/80 h-28 sm:h-36 flex items-center cursor-pointer group shadow-2xs">
+            <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=350&q=80" alt="Ethnic Wear" class="w-[46%] h-full object-cover object-top" />
+            <div class="w-[54%] px-2 py-2 flex flex-col justify-center">
+              <p class="text-sm sm:text-lg font-extrabold text-[#4A2511] leading-tight">MIN. 80%<br/>OFF</p>
+              <span class="mt-1.5 w-5 h-5 rounded-full bg-[#6E1324] text-white flex items-center justify-center group-hover:translate-x-1 transition">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- Right Card: WEDDING GIFTS -->
+          <div onclick="openDealPage('Curated Wedding Gifts', 50)" class="relative rounded-xl overflow-hidden bg-gradient-to-r from-[#7B1526] to-[#560B18] h-28 sm:h-36 flex items-center cursor-pointer group shadow-2xs">
+            <div class="w-[52%] pl-3 pr-1 py-2 flex flex-col justify-center z-10">
+              <p class="text-xs sm:text-base font-extrabold text-white leading-tight uppercase">WEDDING<br/>GIFTS</p>
+              <span class="mt-1.5 w-5 h-5 rounded-full bg-white text-[#6E1324] flex items-center justify-center group-hover:translate-x-1 transition">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=350&q=80" alt="Wedding Gifts" class="w-[48%] h-full object-cover" />
+          </div>
+
+          <!-- Extra Desktop Cards (Hidden on Mobile to preserve exact 2-col screenshot layout, visible on md+) -->
+          <div onclick="openDealPage('Footwear Fiesta', 65)" class="hidden md:flex relative rounded-xl overflow-hidden bg-gradient-to-r from-[#E6F4F1] to-[#CBE8E0] border border-teal-200 h-36 items-center cursor-pointer group">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=350&q=80" alt="Sneakers" class="w-[46%] h-full object-cover" />
+            <div class="w-[54%] px-3">
+              <p class="text-base font-extrabold text-[#114B3F] leading-tight">SNEAKER<br/>FEST 65%</p>
+              <span class="mt-2 w-5 h-5 rounded-full bg-[#114B3F] text-white flex items-center justify-center group-hover:translate-x-1 transition">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+          </div>
+
+          <div onclick="openDealPage('Luxe Beauty & Fragrances', 40)" class="hidden md:flex relative rounded-xl overflow-hidden bg-gradient-to-r from-[#FCE4EC] to-[#F8BBD0] border border-pink-200 h-36 items-center cursor-pointer group">
+            <div class="w-[52%] pl-3">
+              <p class="text-base font-extrabold text-[#880E4F] leading-tight">LUXE<br/>BEAUTY</p>
+              <span class="mt-2 w-5 h-5 rounded-full bg-[#880E4F] text-white flex items-center justify-center group-hover:translate-x-1 transition">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=350&q=80" alt="Beauty" class="w-[48%] h-full object-cover" />
+          </div>
+        </section>
+
+        <!-- 8. SECTION HEADER ("CONTINUE BROWSING THESE BRANDS") & BRAND / PRODUCT GRID -->
+        <section class="pt-1">
+          <div class="arch-banner py-2.5 px-4 flex items-center justify-center gap-2 shadow-sm">
+            <span class="text-[#E5C158] text-sm">❁</span>
+            <h2 class="text-xs sm:text-sm md:text-base font-extrabold text-white tracking-wider uppercase text-center">
+              CONTINUE BROWSING THESE BRANDS
+            </h2>
+            <span class="text-[#E5C158] text-sm">❁</span>
+          </div>
+
+          <!-- Brand Cards Grid -->
+          <div id="home-brands-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mt-3.5">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- TRENDING PRODUCTS FEED -->
+        <section class="pt-2 pb-6">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-sm md:text-base font-extrabold text-[#282C3F] uppercase tracking-wide">Trending For You</h3>
+              <p class="text-xs text-[#535766]">Tap any product to view details, sizes & offers</p>
+            </div>
+            <button onclick="openCategoryPage('All Products')" class="text-xs font-bold text-[#FF3F6C] hover:underline">View All →</button>
+          </div>
+
+          <div id="home-products-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ==================== DYNAMIC INNER PAGE VIEW ==================== -->
+    <div id="view-inner" class="hidden animate-view flex-1 flex flex-col bg-white">
+      <!-- Sticky Inner Header -->
+      <header class="sticky top-0 z-40 bg-white border-b border-gray-200 px-3.5 md:px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="goHome()" class="p-1.5 rounded-full hover:bg-gray-100 text-[#282C3F]" title="Back to Home">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <h1 id="inner-title" class="text-sm md:text-base font-extrabold text-[#282C3F] leading-tight">Category</h1>
+            <p id="inner-subtitle" class="text-[11px] text-[#535766]">Showing curated items</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5">
+          <button onclick="openPage('search')" class="text-[#282C3F] hover:text-[#FF3F6C]">
+            <i data-lucide="search" class="w-5 h-5"></i>
+          </button>
+          <button onclick="openPage('wishlist')" class="relative text-[#282C3F] hover:text-[#FF3F6C]">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+          </button>
+          <button onclick="openPage('bag')" class="relative text-[#282C3F] hover:text-[#FF3F6C]">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+            <span id="inner-bag-badge" class="absolute -top-1.5 -right-1.5 bg-[#FF3F6C] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Inner Body -->
+      <div id="inner-content" class="flex-1 max-w-7xl w-full mx-auto px-3.5 md:px-6 py-4 pb-24">
+        <!-- Injected dynamically by JS -->
+      </div>
+    </div>
+
+    <!-- 9. FIXED BOTTOM NAVIGATION BAR (Mobile & Tablet) -->
+    <nav class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.04)] md:hidden">
+      <div class="max-w-[480px] mx-auto grid grid-cols-5 h-16">
+        <!-- Home -->
+        <button data-nav="home" onclick="switchBottomNav('home')" class="bottom-nav-btn relative flex flex-col items-center justify-center pt-1">
+          <span class="nav-indicator absolute top-0 inset-x-2 h-[3px] bg-[#FF3F6C] rounded-b"></span>
+          <svg class="w-6 h-5" viewBox="0 0 48 36" fill="none">
+            <path d="M4 32V6L16 20L24 10L32 20L44 6V32H37V17L24 31L11 17V32H4Z" fill="url(#myntraGrad)"/>
+          </svg>
+          <span class="nav-label text-[11px] font-bold text-[#FF3F6C] mt-0.5">Home</span>
+        </button>
+
+        <!-- fwd -->
+        <button data-nav="fwd" onclick="switchBottomNav('fwd')" class="bottom-nav-btn relative flex flex-col items-center justify-center pt-1 text-[#282C3F]">
+          <span class="nav-indicator hidden absolute top-0 inset-x-2 h-[3px] bg-[#FF3F6C] rounded-b"></span>
+          <span class="font-black text-base tracking-tighter leading-none">fwd</span>
+          <span class="nav-label text-[10px] text-[#535766] mt-1">Under ₹999</span>
+        </button>
+
+        <!-- m-now -->
+        <button data-nav="mnow" onclick="switchBottomNav('mnow')" class="bottom-nav-btn relative flex flex-col items-center justify-center pt-1 text-[#282C3F]">
+          <span class="nav-indicator hidden absolute top-0 inset-x-2 h-[3px] bg-[#FF3F6C] rounded-b"></span>
+          <span class="font-extrabold italic text-sm tracking-tight leading-none flex items-center">
+            m<span class="text-[#FF3F6C]">⚡</span>now
+          </span>
+          <span class="nav-label text-[10px] text-[#535766] mt-1">From 30 min</span>
+        </button>
+
+        <!-- PRIVÉ -->
+        <button data-nav="prive" onclick="switchBottomNav('prive')" class="bottom-nav-btn relative flex flex-col items-center justify-center pt-1 text-[#282C3F]">
+          <span class="nav-indicator hidden absolute top-0 inset-x-2 h-[3px] bg-[#FF3F6C] rounded-b"></span>
+          <span class="font-serif font-bold text-xs tracking-widest leading-none">PRIVÉ</span>
+          <span class="nav-label text-[10px] text-[#535766] mt-1">Elite Picks</span>
+        </button>
+
+        <!-- Bag -->
+        <button data-nav="bag" onclick="switchBottomNav('bag')" class="bottom-nav-btn relative flex flex-col items-center justify-center pt-1 text-[#282C3F]">
+          <span class="nav-indicator hidden absolute top-0 inset-x-2 h-[3px] bg-[#FF3F6C] rounded-b"></span>
+          <div class="relative">
+            <i data-lucide="shopping-bag" class="w-5 h-5 stroke-[1.7]"></i>
+            <span id="mobile-bag-badge" class="absolute -top-1.5 -right-2 bg-[#FF3F6C] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
+          </div>
+          <span class="nav-label text-[10px] text-[#535766] mt-0.5">Bag</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#282C3F] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-200">
+      Added to Bag!
+    </div>
+
+  </div>
+
+  <!-- APPLICATION DATA & LOGIC -->
+  <script>
+    // --- STATE ---
+    const state = {
+      activeGender: 'ALL',
+      activeCategory: 'Fashion',
+      currentSlide: 0,
+      walletBalance: 0,
+      address: 'Ayushi Sharma - 541R/...',
+      wishlist: [2],
+      bag: [
+        { id: 1, size: 'M', qty: 1 },
+        { id: 3, size: 'UK 7', qty: 1 }
+      ]
+    };
+
+    // --- CATALOG & CONTENT DATA ---
+    const categoriesByTab = {
+      ALL: [
+        { name: 'Fashion', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Beauty', img: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Footwear', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Homeliving', img: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Accessories', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Jewellery', img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=300&q=80' }
+      ],
+      MEN: [
+        { name: 'Ethnic Wear', img: 'https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Casual Shirts', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Sneakers', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Watches', img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Grooming', img: 'https://images.unsplash.com/photo-1621607512214-68297480165e?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Activewear', img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=300&q=80' }
+      ],
+      WOMEN: [
+        { name: 'Lehengas', img: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Dresses', img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Makeup', img: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Heels', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Handbags', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Jewellery', img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=300&q=80' }
+      ],
+      KIDS: [
+        { name: 'Festive Kids', img: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Boys Sets', img: 'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Girls Frocks', img: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Kids Shoes', img: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Toys', img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?auto=format&fit=crop&w=300&q=80' },
+        { name: 'Backpacks', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=300&q=80' }
+      ]
+    };
+
+    const heroSlides = [
+      {
+        kicker: 'GRAND',
+        title: 'WEDDING<br/>SALE',
+        discount: '50-80%<br/><span class="text-xl sm:text-3xl md:text-4xl">OFF</span>',
+        img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80',
+        collection: 'Grand Wedding Sale Collection'
+      },
+      {
+        kicker: 'ROYAL',
+        title: 'ETHNIC<br/>EDIT',
+        discount: 'MIN 60%<br/><span class="text-xl sm:text-3xl md:text-4xl">OFF</span>',
+        img: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=80',
+        collection: 'Royal Ethnic Edit'
+      },
+      {
+        kicker: 'GEN-Z',
+        title: 'FWD<br/>DROPS',
+        discount: 'UNDER<br/><span class="text-xl sm:text-3xl md:text-4xl">₹999</span>',
+        img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80',
+        collection: 'Myntra fwd Under ₹999'
+      },
+      {
+        kicker: 'LUXE',
+        title: 'BEAUTY<br/>FEST',
+        discount: 'UP TO<br/><span class="text-xl sm:text-3xl md:text-4xl">50% OFF</span>',
+        img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=80',
+        collection: 'Luxe Beauty & Skincare'
+      },
+      {
+        kicker: 'SNEAKER',
+        title: 'STREET<br/>CULTURE',
+        discount: '40-70%<br/><span class="text-xl sm:text-3xl md:text-4xl">OFF</span>',
+        img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80',
+        collection: 'Sneaker Street Culture'
+      }
+    ];
+
+    const brands = [
+      { name: 'HOUSE OF PATAUDI', offer: 'Min. 60% Off', img: 'https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=400&q=80' },
+      { name: 'MOKOSH', offer: 'Flat 50% Off', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=400&q=80' },
+      { name: 'BIBA', offer: 'Up to 70% Off', img: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80' },
+      { name: 'MANYAVAR', offer: 'Wedding Edit', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80' },
+      { name: 'MANGO', offer: 'Min. 40% Off', img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80' },
+      { name: 'ALDO', offer: 'Flat 50% Off', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=400&q=80' }
+    ];
+
+    const products = [
+      {
+        id: 1,
+        brand: 'HOUSE OF PATAUDI',
+        title: 'Men Maroon Embroidered Silk Kurta Set',
+        price: 2399,
+        mrp: 5999,
+        discount: '60% OFF',
+        rating: 4.5,
+        reviews: '1.8k',
+        category: 'Fashion',
+        gender: 'MEN',
+        express: true,
+        fwd: false,
+        prive: true,
+        sizes: ['S', 'M', 'L', 'XL'],
+        img: 'https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 2,
+        brand: 'BIBA',
+        title: 'Women Magenta Zari Sequinned Lehenga Choli',
+        price: 3499,
+        mrp: 8999,
+        discount: '61% OFF',
+        rating: 4.6,
+        reviews: '2.4k',
+        category: 'Fashion',
+        gender: 'WOMEN',
+        express: true,
+        fwd: false,
+        prive: true,
+        sizes: ['XS', 'S', 'M', 'L'],
+        img: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 3,
+        brand: 'ALDO',
+        title: 'Gold-Toned Embellished Stiletto Wedding Heels',
+        price: 2999,
+        mrp: 5999,
+        discount: '50% OFF',
+        rating: 4.4,
+        reviews: '940',
+        category: 'Footwear',
+        gender: 'WOMEN',
+        express: true,
+        fwd: false,
+        prive: true,
+        sizes: ['UK 5', 'UK 6', 'UK 7', 'UK 8'],
+        img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 4,
+        brand: 'MOKOSH',
+        title: 'Botanical Rose & Saffron Radiance Gift Box',
+        price: 899,
+        mrp: 1799,
+        discount: '50% OFF',
+        rating: 4.7,
+        reviews: '3.1k',
+        category: 'Beauty',
+        gender: 'WOMEN',
+        express: true,
+        fwd: true,
+        prive: false,
+        sizes: ['100ml', '200ml'],
+        img: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 5,
+        brand: 'HOME CENTRE',
+        title: 'Nordic Brass Tripod Floor Lamp with Shade',
+        price: 2799,
+        mrp: 6999,
+        discount: '60% OFF',
+        rating: 4.3,
+        reviews: '510',
+        category: 'Homeliving',
+        gender: 'ALL',
+        express: false,
+        fwd: false,
+        prive: true,
+        sizes: ['Standard'],
+        img: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 6,
+        brand: 'FOSSIL',
+        title: 'Chronograph Tan Leather & Rose Gold Watch',
+        price: 5495,
+        mrp: 10995,
+        discount: '50% OFF',
+        rating: 4.6,
+        reviews: '4.2k',
+        category: 'Accessories',
+        gender: 'MEN',
+        express: true,
+        fwd: false,
+        prive: true,
+        sizes: ['One Size'],
+        img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 7,
+        brand: 'H&M',
+        title: 'Ribbed Ruched Bodycon Midi Dress',
+        price: 899,
+        mrp: 1499,
+        discount: '40% OFF',
+        rating: 4.4,
+        reviews: '1.2k',
+        category: 'Fashion',
+        gender: 'WOMEN',
+        express: true,
+        fwd: true,
+        prive: false,
+        sizes: ['XS', 'S', 'M', 'L'],
+        img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 8,
+        brand: 'NIKE',
+        title: 'Air Max Heritage Running Sneakers',
+        price: 4995,
+        mrp: 8995,
+        discount: '44% OFF',
+        rating: 4.8,
+        reviews: '5.6k',
+        category: 'Footwear',
+        gender: 'MEN',
+        express: true,
+        fwd: false,
+        prive: true,
+        sizes: ['UK 7', 'UK 8', 'UK 9', 'UK 10'],
+        img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 9,
+        brand: 'ZARA KIDS',
+        title: 'Embroidered Festive Velvet Dress',
+        price: 949,
+        mrp: 1899,
+        discount: '50% OFF',
+        rating: 4.6,
+        reviews: '620',
+        category: 'Fashion',
+        gender: 'KIDS',
+        express: true,
+        fwd: true,
+        prive: false,
+        sizes: ['4-5Y', '6-7Y', '8-9Y'],
+        img: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=500&q=80'
+      },
+      {
+        id: 10,
+        brand: 'ZAVERI PEARLS',
+        title: 'Kundan & Pearl Choker Necklace Set',
+        price: 799,
+        mrp: 3995,
+        discount: '80% OFF',
+        rating: 4.5,
+        reviews: '3.9k',
+        category: 'Accessories',
+        gender: 'WOMEN',
+        express: true,
+        fwd: true,
+        prive: false,
+        sizes: ['One Size'],
+        img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=80'
+      }
+    ];
+
+    // --- INITIAL RENDER ---
+    function init() {
+      renderCategoryStrip();
+      renderHeroDots();
+      renderHomeBrands();
+      renderHomeProducts();
+      updateBadges();
+      lucide.createIcons();
+
+      // Auto-advance hero banner every 4.5s
+      setInterval(() => {
+        if (!document.getElementById('view-home').classList.contains('hidden')) {
+          nextSlide();
+        }
+      }, 4500);
+    }
+
+    // --- RENDER HELPERS ---
+    function renderCategoryStrip() {
+      const strip = document.getElementById('category-strip');
+      const items = categoriesByTab[state.activeGender] || categoriesByTab.ALL;
+      strip.innerHTML = items.map((cat, idx) => {
+        const isActive = idx === 0;
+        return `
+          <button onclick="openCategoryPage('${cat.name}')" class="flex flex-col items-center shrink-0 w-[68px] sm:w-20 md:w-full group">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 md:w-full md:h-24 rounded-2xl overflow-hidden bg-gray-100 border ${isActive ? 'border-[#FF3F6C] ring-2 ring-pink-100' : 'border-gray-100'} group-hover:scale-105 transition">
+              <img src="${cat.img}" alt="${cat.name}" class="w-full h-full object-cover" />
+            </div>
+            <span class="mt-1.5 text-[11px] sm:text-xs ${isActive ? 'font-extrabold text-[#FF3F6C]' : 'font-semibold text-[#282C3F]'} truncate max-w-full">
+              ${cat.name}
+            </span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderHeroDots() {
+      const dotsContainer = document.getElementById('hero-dots');
+      // 10 pagination indicators matching screenshot
+      let html = '';
+      for (let i = 0; i < 10; i++) {
+        const active = (i === state.currentSlide % 10);
+        html += `<button onclick="goToSlide(${i % heroSlides.length})" class="h-1.5 rounded-full transition-all ${active ? 'w-3 bg-[#282C3F]' : 'w-1.5 bg-gray-300'}"></button>`;
+      }
+      dotsContainer.innerHTML = html;
+    }
+
+    function updateHeroSlide() {
+      const slide = heroSlides[state.currentSlide % heroSlides.length];
+      document.getElementById('hero-img').src = slide.img;
+      document.getElementById('hero-kicker').textContent = slide.kicker;
+      document.getElementById('hero-badge-title').innerHTML = slide.title;
+      document.getElementById('hero-discount').innerHTML = slide.discount;
+      renderHeroDots();
+    }
+
+    function nextSlide() {
+      state.currentSlide = (state.currentSlide + 1) % 10;
+      updateHeroSlide();
+    }
+
+    function prevSlide() {
+      state.currentSlide = (state.currentSlide - 1 + 10) % 10;
+      updateHeroSlide();
+    }
+
+    function goToSlide(idx) {
+      state.currentSlide = idx;
+      updateHeroSlide();
+    }
+
+    function renderHomeBrands() {
+      const grid = document.getElementById('home-brands-grid');
+      grid.innerHTML = brands.map(b => `
+        <div onclick="openBrandPage('${b.name}')" class="rounded-xl overflow-hidden border border-amber-200/70 bg-gradient-to-b from-white to-amber-50/40 shadow-2xs cursor-pointer group hover:shadow-md transition">
+          <div class="h-28 sm:h-32 overflow-hidden">
+            <img src="${b.img}" alt="${b.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+          </div>
+          <div class="p-2 text-center">
+            <p class="text-[11px] font-extrabold text-[#282C3F] truncate">${b.name}</p>
+            <p class="text-xs font-bold text-[#FF3F6C]">${b.offer}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderProductCard(p) {
+      const isWished = state.wishlist.includes(p.id);
+      return `
+        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-2xs hover:shadow-md transition flex flex-col group">
+          <div onclick="openProductDetail(${p.id})" class="relative aspect-[3/4] bg-gray-100 overflow-hidden cursor-pointer">
+            <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+            
+            <!-- Rating Pill -->
+            <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1 shadow-2xs">
+              <span>${p.rating}</span>
+              <span class="text-emerald-600">★</span>
+              <span class="text-gray-400">| ${p.reviews}</span>
+            </div>
+
+            ${p.express ? `<span class="absolute top-2 left-2 bg-[#282C3F]/85 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">m⚡now</span>` : ''}
+
+            <!-- Wishlist Button -->
+            <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow-xs hover:scale-110 transition">
+              <i data-lucide="heart" class="w-3.5 h-3.5 ${isWished ? 'fill-[#FF3F6C] text-[#FF3F6C]' : 'text-[#282C3F]'}"></i>
+            </button>
+          </div>
+
+          <div onclick="openProductDetail(${p.id})" class="p-2.5 flex-1 flex flex-col justify-between cursor-pointer">
+            <div>
+              <p class="text-xs font-extrabold text-[#282C3F] truncate">${p.brand}</p>
+              <p class="text-[11px] text-[#535766] truncate mt-0.5">${p.title}</p>
+            </div>
+            <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
+              <span class="text-xs font-extrabold text-[#282C3F]">₹${p.price.toLocaleString()}</span>
+              <span class="text-[10px] text-gray-400 line-through">₹${p.mrp.toLocaleString()}</span>
+              <span class="text-[10px] font-bold text-[#FF905A]">(${p.discount})</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHomeProducts() {
+      const grid = document.getElementById('home-products-grid');
+      const filtered = state.activeGender === 'ALL' 
+        ? products 
+        : products.filter(p => p.gender === state.activeGender || p.gender === 'ALL');
+      grid.innerHTML = filtered.map(renderProductCard).join('');
+    }
+
+    // --- TAB & NAVIGATION INTERACTIONS ---
+    function switchGenderTab(tab) {
+      state.activeGender = tab;
+      document.querySelectorAll('.gender-tab').forEach(btn => {
+        if (btn.dataset.tab === tab) {
+          btn.classList.add('folder-tab-active', 'font-extrabold', 'text-[#282C3F]');
+          btn.classList.remove('font-bold', 'text-[#535766]');
+        } else {
+          btn.classList.remove('folder-tab-active', 'font-extrabold', 'text-[#282C3F]');
+          btn.classList.add('font-bold', 'text-[#535766]');
+        }
+      });
+      renderCategoryStrip();
+      renderHomeProducts();
+      lucide.createIcons();
+    }
+
+    function selectGender(tab) {
+      goHome();
+      switchGenderTab(tab);
+    }
+
+    function switchBottomNav(navKey) {
+      document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+        const isTarget = btn.dataset.nav === navKey;
+        const indicator = btn.querySelector('.nav-indicator');
+        const label = btn.querySelector('.nav-label');
+        if (isTarget) {
+          indicator.classList.remove('hidden');
+          label.classList.add('text-[#FF3F6C]', 'font-bold');
+          label.classList.remove('text-[#535766]');
+        } else {
+          indicator.classList.add('hidden');
+          label.classList.remove('text-[#FF3F6C]', 'font-bold');
+          label.classList.add('text-[#535766]');
+        }
+      });
+
+      if (navKey === 'home') {
+        goHome();
+      } else {
+        openPage(navKey);
+      }
+    }
+
+    function goHome() {
+      document.getElementById('view-inner').classList.add('hidden');
+      document.getElementById('view-home').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderHomeProducts();
+      lucide.createIcons();
+    }
+
+    function showInnerView(title, subtitle, htmlContent) {
+      document.getElementById('view-home').classList.add('hidden');
+      const inner = document.getElementById('view-inner');
+      inner.classList.remove('hidden');
+      document.getElementById('inner-title').textContent = title;
+      document.getElementById('inner-subtitle').textContent = subtitle;
+      document.getElementById('inner-content').innerHTML = htmlContent;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateBadges();
+      lucide.createIcons();
+    }
+
+    // --- INNER PAGES ROUTER ---
+    function openCategoryPage(categoryName) {
+      const items = categoryName === 'All Products' 
+        ? products 
+        : products.filter(p => 
+            p.category.toLowerCase().includes(categoryName.toLowerCase()) ||
+            p.title.toLowerCase().includes(categoryName.toLowerCase()) ||
+            categoryName === 'Fashion'
+          );
+      const list = items.length ? items : products;
+
+      const html = `
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-4 border-b border-gray-100">
+          <span class="px-3 py-1.5 rounded-full bg-[#282C3F] text-white text-xs font-bold shrink-0">Sort: Popularity</span>
+          <span class="px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold shrink-0">50% & Above</span>
+          <span class="px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold shrink-0">m⚡now Express</span>
+          <span class="px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold shrink-0">Price: Low to High</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          ${list.map(renderProductCard).join('')}
+        </div>
+      `;
+      showInnerView(categoryName, `${list.length} Styles Found`, html);
+    }
+
+    function openBrandPage(brandName) {
+      const list = products.filter(p => p.brand === brandName);
+      const displayList = list.length ? list : products.slice(0, 6);
+      const html = `
+        <div class="bg-gradient-to-r from-[#FFF0F3] to-[#FDF2E9] p-4 rounded-2xl mb-4 flex items-center justify-between border border-pink-100">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-[#FF3F6C]">Official Brand Store</span>
+            <h2 class="text-lg font-extrabold text-[#282C3F]">${brandName}</h2>
+            <p class="text-xs text-[#535766]">100% Authentic • Easy 14-Day Returns</p>
+          </div>
+          <span class="px-3 py-1.5 bg-[#282C3F] text-white text-xs font-bold rounded-full">Following ✓</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+          ${displayList.map(renderProductCard).join('')}
+        </div>
+      `;
+      showInnerView(brandName, 'Brand Storefront', html);
+    }
+
+    function openHeroCollection() {
+      const slide = heroSlides[state.currentSlide % heroSlides.length];
+      openDealPage(slide.collection, 50);
+    }
+
+    function openDealPage(dealTitle, minDiscount) {
+      const html = `
+        <div class="rounded-2xl bg-gradient-to-r from-[#6E1324] to-[#9B1D35] text-white p-5 mb-5 flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-widest text-amber-300 font-bold">Limited Time Wedding Offer</p>
+            <h2 class="font-serif text-xl sm:text-2xl font-bold mt-0.5">${dealTitle}</h2>
+            <p class="text-xs text-pink-100 mt-1">Extra 7.5% Cashback on Flipkart Axis & SBI Cards</p>
+          </div>
+          <div class="text-right">
+            <span class="text-2xl font-extrabold text-amber-300">${minDiscount}%+</span>
+            <p class="text-[10px] uppercase">Savings</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          ${products.map(renderProductCard).join('')}
+        </div>
+      `;
+      showInnerView(dealTitle, 'Festive Offer Zone', html);
+    }
+
+    function openProductDetail(productId) {
+      const p = products.find(item => item.id === productId) || products[0];
+      const isWished = state.wishlist.includes(p.id);
+      const html = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="rounded-2xl overflow-hidden bg-gray-100 aspect-[3/4] max-h-[500px] mx-auto w-full relative">
+            <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
+            <div class="absolute bottom-3 left-3 bg-white/95 px-2.5 py-1 rounded-full text-xs font-bold shadow">
+              ${p.rating} ★ (${p.reviews} Ratings)
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-between space-y-5">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#FF3F6C]">${p.brand}</span>
+                ${p.express ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full">⚡ Express 30-Min Delivery</span>` : ''}
+              </div>
+              <h2 class="text-lg md:text-2xl font-bold text-[#282C3F] mt-1">${p.title}</h2>
+
+              <div class="mt-3 flex items-baseline gap-2.5">
+                <span class="text-2xl font-extrabold text-[#282C3F]">₹${p.price.toLocaleString()}</span>
+                <span class="text-sm text-gray-400 line-through">MRP ₹${p.mrp.toLocaleString()}</span>
+                <span class="text-sm font-extrabold text-[#FF905A]">(${p.discount})</span>
+              </div>
+              <p class="text-xs text-emerald-600 font-bold mt-0.5">inclusive of all taxes</p>
+
+              <!-- Size Selector -->
+              <div class="mt-5">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-extrabold uppercase tracking-wider text-[#282C3F]">Select Size</span>
+                  <span class="text-xs font-bold text-[#FF3F6C]">Size Chart →</span>
+                </div>
+                <div class="flex flex-wrap gap-2.5" id="pdp-sizes">
+                  ${p.sizes.map((sz, i) => `
+                    <button onclick="selectPdpSize(this, '${sz}')" class="pdp-size-btn px-4 py-2 rounded-full border text-xs font-bold transition ${i === 0 ? 'border-[#FF3F6C] bg-pink-50 text-[#FF3F6C]' : 'border-gray-300 text-[#282C3F] hover:border-[#FF3F6C]'}">
+                      ${sz}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Delivery Check -->
+              <div class="mt-5 p-3.5 rounded-xl bg-gray-50 border border-gray-100">
+                <p class="text-xs font-bold text-[#282C3F] flex items-center gap-1.5">
+                  <i data-lucide="truck" class="w-4 h-4 text-[#FF3F6C]"></i>
+                  Delivering to <span class="underline">${state.address}</span>
+                </p>
+                <p class="text-[11px] text-[#535766] mt-1">✓ Pay on Delivery available • ✓ Easy 14 days return & exchange</p>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <button onclick="toggleWishlist(${p.id}); openProductDetail(${p.id})" class="py-3.5 rounded-xl border border-gray-300 font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:border-[#FF3F6C]">
+                <i data-lucide="heart" class="w-4 h-4 ${isWished ? 'fill-[#FF3F6C] text-[#FF3F6C]' : ''}"></i>
+                <span>${isWished ? 'Wishlisted' : 'Wishlist'}</span>
+              </button>
+              <button onclick="addToBag(${p.id})" class="py-3.5 rounded-xl bg-[#FF3F6C] hover:bg-[#e6355e] text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                <span>Add to Bag</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      window.selectedSize = p.sizes[0];
+      showInnerView(p.brand, p.title, html);
+    }
+
+    function selectPdpSize(btn, size) {
+      window.selectedSize = size;
+      document.querySelectorAll('.pdp-size-btn').forEach(b => {
+        b.classList.remove('border-[#FF3F6C]', 'bg-pink-50', 'text-[#FF3F6C]');
+        b.classList.add('border-gray-300', 'text-[#282C3F]');
+      });
+      btn.classList.add('border-[#FF3F6C]', 'bg-pink-50', 'text-[#FF3F6C]');
+      btn.classList.remove('border-gray-300', 'text-[#282C3F]');
+    }
+
+    function openPage(pageKey) {
+      if (pageKey === 'search') {
+        const html = `
+          <div class="mb-4">
+            <div class="flex items-center gap-2 border-2 border-[#FF3F6C] rounded-full px-4 py-2.5 bg-white">
+              <i data-lucide="search" class="w-4 h-4 text-[#FF3F6C]"></i>
+              <input id="search-input" oninput="filterSearch(this.value)" type="text" placeholder="Search for Dresses, Kurtas, Sneakers, Mokosh..." class="flex-1 text-sm outline-none" autofocus />
+            </div>
+            <div class="flex flex-wrap gap-2 mt-3">
+              ${['Wedding Lehenga', 'Silk Kurta', 'Heels', 'Mokosh', 'Watches', 'Under ₹999'].map(tag => `
+                <button onclick="document.getElementById('search-input').value='${tag}'; filterSearch('${tag}')" class="px-3 py-1 rounded-full bg-pink-50 text-[#FF3F6C] text-xs font-bold">
+                  ${tag}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div id="search-results" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            ${products.map(renderProductCard).join('')}
+          </div>
+        `;
+        showInnerView('Search Myntra', 'Trending brands & styles', html);
+      }
+
+      else if (pageKey === 'voice-search' || pageKey === 'visual-search') {
+        const isVoice = pageKey === 'voice-search';
+        const html = `
+          <div class="max-w-md mx-auto text-center py-12 px-4">
+            <div class="w-20 h-20 rounded-full bg-pink-100 text-[#FF3F6C] flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <i data-lucide="${isVoice ? 'mic' : 'camera'}" class="w-9 h-9"></i>
+            </div>
+            <h2 class="text-lg font-extrabold text-[#282C3F]">${isVoice ? 'Listening for your style...' : 'Visual Style Finder'}</h2>
+            <p class="text-xs text-[#535766] mt-1">${isVoice ? 'Try saying "Show me Maroon Silk Kurtas" or "Wedding Lehengas"' : 'Upload or snap any outfit photo to find exact & similar styles on Myntra.'}</p>
+            <div class="mt-6 flex flex-col gap-2.5">
+              <button onclick="openCategoryPage('Fashion')" class="py-3 bg-[#FF3F6C] text-white text-xs font-bold rounded-xl">
+                ${isVoice ? 'Simulate: "Wedding Collection"' : 'Try Sample Outfit Match'}
+              </button>
+              <button onclick="goHome()" class="py-2.5 text-xs font-bold text-gray-500">Cancel</button>
+            </div>
+          </div>
+        `;
+        showInnerView(isVoice ? 'Voice Search' : 'Myntra Lens', 'AI Style Assistant', html);
+      }
+
+      else if (pageKey === 'address') {
+        const addresses = [
+          { name: 'Ayushi Sharma', tag: 'HOME', text: '541R/22, Model Town, Near Rose Garden, Ludhiana - 141002' },
+          { name: 'Ayushi Sharma', tag: 'WORK', text: 'Tower B, 4th Floor, Cyber Hub Tech Park, Gurugram - 122002' }
+        ];
+        const html = `
+          <div class="max-w-lg mx-auto space-y-3">
+            <p class="text-xs font-bold uppercase text-gray-400">Saved Delivery Addresses</p>
+            ${addresses.map(a => `
+              <div onclick="selectAddress('${a.name} - ${a.text.slice(0, 8)}...')" class="p-4 rounded-xl border-2 ${state.address.includes(a.text.slice(0,5)) ? 'border-[#FF3F6C] bg-pink-50/30' : 'border-gray-200'} cursor-pointer hover:border-[#FF3F6C]">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-extrabold text-[#282C3F]">${a.name}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700">${a.tag}</span>
+                </div>
+                <p class="text-xs text-[#535766] mt-1">${a.text}</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        showInnerView('Select Delivery Address', 'Check express delivery availability', html);
+      }
+
+      else if (pageKey === 'wallet') {
+        const html = `
+          <div class="max-w-md mx-auto space-y-4">
+            <div class="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-5 shadow">
+              <p class="text-xs uppercase tracking-wider opacity-85">Myntra Credit & MynCash</p>
+              <h2 class="text-3xl font-extrabold mt-1">₹${state.walletBalance}</h2>
+              <p class="text-xs mt-2 opacity-90">Instant refunds & gift card balance</p>
+            </div>
+            <button onclick="topUpWallet(500)" class="w-full py-3 rounded-xl bg-[#FF3F6C] text-white font-bold text-xs uppercase tracking-wider">
+              + Add ₹500 Instant Gift Voucher
+            </button>
+          </div>
+        `;
+        showInnerView('Myntra Wallet', 'MynCash & Gift Cards', html);
+      }
+
+      else if (pageKey === 'notifications') {
+        const notifs = [
+          { title: 'Grand Wedding Sale is LIVE! 🎉', desc: 'Flat 50-80% Off on House of Pataudi, Biba & 2000+ brands.', time: '12 mins ago' },
+          { title: 'Bank Offer Unlocked 💳', desc: 'Get Flat 7.5% Cashback using Flipkart Axis Bank & SBI Cards.', time: '2 hours ago' },
+          { title: 'Price Drop on your Wishlist ❤️', desc: 'BIBA Magenta Sequinned Lehenga is now at ₹3,499.', time: 'Yesterday' }
+        ];
+        const html = `
+          <div class="max-w-lg mx-auto space-y-3">
+            ${notifs.map(n => `
+              <div onclick="openHeroCollection()" class="p-3.5 rounded-xl border border-gray-100 bg-pink-50/30 hover:bg-pink-50 cursor-pointer">
+                <div class="flex justify-between items-start gap-2">
+                  <h3 class="text-xs font-extrabold text-[#282C3F]">${n.title}</h3>
+                  <span class="text-[10px] text-gray-400 shrink-0">${n.time}</span>
+                </div>
+                <p class="text-xs text-[#535766] mt-1">${n.desc}</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        showInnerView('Notifications', 'Latest alerts & deals', html);
+      }
+
+      else if (pageKey === 'wishlist') {
+        const wishedItems = products.filter(p => state.wishlist.includes(p.id));
+        const html = wishedItems.length ? `
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+            ${wishedItems.map(renderProductCard).join('')}
+          </div>
+        ` : `
+          <div class="text-center py-16">
+            <p class="text-base font-extrabold text-[#282C3F]">Your Wishlist is Empty</p>
+            <p class="text-xs text-gray-500 mt-1">Tap the heart icon on any item to save it here.</p>
+            <button onclick="goHome()" class="mt-4 px-5 py-2.5 bg-[#FF3F6C] text-white text-xs font-bold rounded-xl">Explore Styles</button>
+          </div>
+        `;
+        showInnerView('My Wishlist', `${wishedItems.length} Saved Items`, html);
+      }
+
+      else if (pageKey === 'profile') {
+        const html = `
+          <div class="max-w-lg mx-auto space-y-4">
+            <div class="flex items-center gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-[#FFF0F3] to-white border border-pink-100">
+              <div class="w-14 h-14 rounded-full bg-[#FF3F6C] text-white flex items-center justify-center text-xl font-extrabold">AS</div>
+              <div>
+                <h2 class="text-base font-extrabold text-[#282C3F]">Ayushi Sharma</h2>
+                <p class="text-xs text-[#535766]">Myntra Insider • Gold Tier</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="openPage('bag')" class="p-3.5 rounded-xl border border-gray-200 text-left hover:border-[#FF3F6C]">
+                <p class="text-xs font-extrabold text-[#282C3F]">Orders & Bag</p>
+                <p class="text-[11px] text-gray-500">Track & manage items</p>
+              </button>
+              <button onclick="openPage('wishlist')" class="p-3.5 rounded-xl border border-gray-200 text-left hover:border-[#FF3F6C]">
+                <p class="text-xs font-extrabold text-[#282C3F]">Wishlist (${state.wishlist.length})</p>
+                <p class="text-[11px] text-gray-500">Your saved styles</p>
+              </button>
+              <button onclick="openPage('wallet')" class="p-3.5 rounded-xl border border-gray-200 text-left hover:border-[#FF3F6C]">
+                <p class="text-xs font-extrabold text-[#282C3F]">MynCash (₹${state.walletBalance})</p>
+                <p class="text-[11px] text-gray-500">Wallet & vouchers</p>
+              </button>
+              <button onclick="openPage('address')" class="p-3.5 rounded-xl border border-gray-200 text-left hover:border-[#FF3F6C]">
+                <p class="text-xs font-extrabold text-[#282C3F]">Addresses</p>
+                <p class="text-[11px] text-gray-500">Manage delivery locations</p>
+              </button>
+            </div>
+          </div>
+        `;
+        showInnerView('Ayushi Sharma', 'Account & Insider Rewards', html);
+      }
+
+      else if (pageKey === 'all-categories') {
+        const allCats = [...categoriesByTab.ALL, ...categoriesByTab.MEN.slice(0,3), ...categoriesByTab.WOMEN.slice(0,3)];
+        const html = `
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            ${allCats.map(c => `
+              <button onclick="openCategoryPage('${c.name}')" class="p-2.5 rounded-xl border border-gray-100 bg-gray-50/60 flex flex-col items-center hover:border-[#FF3F6C]">
+                <img src="${c.img}" class="w-16 h-16 rounded-xl object-cover mb-2" alt="${c.name}" />
+                <span class="text-xs font-bold text-[#282C3F] text-center">${c.name}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+        showInnerView('All Categories', 'Browse every department', html);
+      }
+
+      else if (pageKey === 'bank-offers') {
+        const html = `
+          <div class="max-w-lg mx-auto space-y-3">
+            <div class="p-4 rounded-2xl bg-gradient-to-r from-[#FDE7DC] to-[#F9DFD4] border border-orange-200">
+              <h2 class="text-base font-extrabold text-[#282C3F]">Flat 7.5% Instant Cashback</h2>
+              <p class="text-xs text-[#535766] mt-1">Valid on Flipkart Axis Bank Credit Card & SBI Credit Cards on minimum spend of ₹2,500.</p>
+              <p class="text-[11px] font-bold text-emerald-700 mt-2">✓ Auto-applied at checkout</p>
+            </div>
+          </div>
+        `;
+        showInnerView('Bank & Partner Offers', 'Save extra at checkout', html);
+      }
+
+      else if (pageKey === 'fwd') {
+        const fwdItems = products.filter(p => p.fwd || p.price < 1500);
+        const html = `
+          <div class="rounded-2xl bg-black text-white p-4 mb-4 flex items-center justify-between">
+            <div>
+              <span class="text-xl font-black tracking-tighter">fwd</span>
+              <p class="text-xs text-gray-300">Gen-Z Trend Drops • Everything Under ₹999</p>
+            </div>
+            <span class="bg-[#FF3F6C] text-white text-xs font-bold px-3 py-1 rounded-full">Hot Drops</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            ${fwdItems.map(renderProductCard).join('')}
+          </div>
+        `;
+        showInnerView('Myntra fwd', 'Under ₹999 Store', html);
+      }
+
+      else if (pageKey === 'mnow') {
+        const mnowItems = products.filter(p => p.express);
+        const html = `
+          <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 mb-4 flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-extrabold text-emerald-900">m⚡now Express Delivery</h2>
+              <p class="text-xs text-emerald-700">Delivered in 30 mins to ${state.address}</p>
+            </div>
+            <span class="text-2xl">⚡</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            ${mnowItems.map(renderProductCard).join('')}
+          </div>
+        `;
+        showInnerView('m⚡now Express', 'Delivery from 30 mins', html);
+      }
+
+      else if (pageKey === 'prive') {
+        const priveItems = products.filter(p => p.prive);
+        const html = `
+          <div class="rounded-2xl bg-gradient-to-r from-[#1A1A1A] to-[#332B1E] text-[#F5D97E] p-5 mb-4">
+            <p class="font-serif text-xl font-bold tracking-widest">MYNTRA PRIVÉ</p>
+            <p class="text-xs text-gray-300 mt-1">Invite-only luxury & designer wedding couture.</p>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            ${priveItems.map(renderProductCard).join('')}
+          </div>
+        `;
+        showInnerView('PRIVÉ Luxury', 'Elite Designer Picks', html);
+      }
+
+      else if (pageKey === 'bag') {
+        renderBagPage();
+      }
+    }
+
+    function filterSearch(query) {
+      const q = query.toLowerCase().trim();
+      const filtered = products.filter(p => 
+        p.title.toLowerCase().includes(q) || 
+        p.brand.toLowerCase().includes(q) || 
+        p.category.toLowerCase().includes(q)
+      );
+      document.getElementById('search-results').innerHTML = filtered.map(renderProductCard).join('');
+      lucide.createIcons();
+    }
+
+    function renderBagPage() {
+      const bagDetails = state.bag.map(entry => {
+        const prod = products.find(p => p.id === entry.id);
+        return { ...prod, size: entry.size, qty: entry.qty };
+      }).filter(Boolean);
+
+      const subtotal = bagDetails.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const totalMrp = bagDetails.reduce((sum, item) => sum + item.mrp * item.qty, 0);
+
+      const html = bagDetails.length ? `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-4xl mx-auto">
+          <div class="lg:col-span-7 space-y-3">
+            ${bagDetails.map((item, idx) => `
+              <div class="flex gap-3 p-3 rounded-xl border border-gray-200 bg-white">
+                <img src="${item.img}" class="w-20 h-24 rounded-lg object-cover shrink-0" alt="${item.title}" />
+                <div class="flex-1">
+                  <div class="flex justify-between">
+                    <p class="text-xs font-extrabold text-[#282C3F]">${item.brand}</p>
+                    <button onclick="removeFromBag(${idx})" class="text-gray-400 hover:text-red-500">
+                      <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                  <p class="text-xs text-[#535766] line-clamp-1">${item.title}</p>
+                  <span class="inline-block mt-1 px-2 py-0.5 bg-gray-100 rounded text-[11px] font-bold">Size: ${item.size} • Qty: ${item.qty}</span>
+                  <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-sm font-extrabold text-[#282C3F]">₹${item.price.toLocaleString()}</span>
+                    <span class="text-xs text-gray-400 line-through">₹${item.mrp.toLocaleString()}</span>
+                    <span class="text-xs font-bold text-[#FF905A]">${item.discount}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="p-4 rounded-2xl border border-gray-200 bg-gray-50/60 space-y-2.5">
+              <p class="text-xs font-extrabold uppercase text-[#282C3F]">Price Details (${bagDetails.length} Items)</p>
+              <div class="flex justify-between text-xs text-[#535766]">
+                <span>Total MRP</span>
+                <span>₹${totalMrp.toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between text-xs text-emerald-600 font-bold">
+                <span>Discount on MRP</span>
+                <span>-₹${(totalMrp - subtotal).toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between text-xs text-[#535766]">
+                <span>Convenience Fee</span>
+                <span class="text-emerald-600 font-bold">FREE</span>
+              </div>
+              <div class="border-t border-gray-200 pt-2.5 flex justify-between text-sm font-extrabold text-[#282C3F]">
+                <span>Total Amount</span>
+                <span>₹${subtotal.toLocaleString()}</span>
+              </div>
+              <button onclick="placeOrder()" class="w-full mt-2 py-3 rounded-xl bg-[#FF3F6C] hover:bg-[#e6355e] text-white font-extrabold text-xs uppercase tracking-wider shadow">
+                Place Order
+              </button>
+            </div>
+          </div>
+        </div>
+      ` : `
+        <div class="text-center py-16">
+          <p class="text-base font-extrabold text-[#282C3F]">Hey, it feels so light!</p>
+          <p class="text-xs text-gray-500 mt-1">There is nothing in your bag. Let's add some items.</p>
+          <button onclick="goHome()" class="mt-4 px-5 py-2.5 bg-[#FF3F6C] text-white text-xs font-bold rounded-xl">Add Items From Home</button>
+        </div>
+      `;
+      showInnerView('Shopping Bag', `${bagDetails.length} Item(s) Ready`, html);
+    }
+
+    // --- MUTATIONS ---
+    function toggleWishlist(productId) {
+      const idx = state.wishlist.indexOf(productId);
+      if (idx > -1) {
+        state.wishlist.splice(idx, 1);
+        showToast('Removed from Wishlist');
+      } else {
+        state.wishlist.push(productId);
+        showToast('Added to Wishlist ❤️');
+      }
+      updateBadges();
+      if (!document.getElementById('view-home').classList.contains('hidden')) {
+        renderHomeProducts();
+        lucide.createIcons();
+      }
+    }
+
+    function addToBag(productId) {
+      state.bag.push({ id: productId, size: window.selectedSize || 'M', qty: 1 });
+      updateBadges();
+      showToast('Added to Bag 🛍️');
+    }
+
+    function removeFromBag(index) {
+      state.bag.splice(index, 1);
+      updateBadges();
+      renderBagPage();
+    }
+
+    function placeOrder() {
+      state.bag = [];
+      updateBadges();
+      showToast('Order Placed Successfully! 🎉');
+      goHome();
+    }
+
+    function selectAddress(addr) {
+      state.address = addr;
+      document.getElementById('current-address-label').textContent = addr;
+      showToast('Delivery location updated');
+      goHome();
+    }
+
+    function topUpWallet(amount) {
+      state.walletBalance += amount;
+      document.getElementById('wallet-balance-pill').textContent = `₹${state.walletBalance}`;
+      showToast(`₹${amount} added to MynCash!`);
+      openPage('wallet');
+    }
+
+    function updateBadges() {
+      const bagCount = state.bag.length;
+      ['mobile-bag-badge', 'desktop-bag-badge', 'inner-bag-badge'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = bagCount;
+      });
+      const wishEl = document.getElementById('wishlist-badge');
+      if (wishEl) {
+        wishEl.textContent = state.wishlist.length;
+        wishEl.classList.toggle('hidden', state.wishlist.length === 0);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('opacity-0');
+      setTimeout(() => t.classList.add('opacity-0'), 2200);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
